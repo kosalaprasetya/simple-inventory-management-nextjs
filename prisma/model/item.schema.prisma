@@ -1,0 +1,12 @@
+model Item {
+    id          String   @id @default(uuid())
+    user_id     String
+    category_id String
+    name        String
+    stock       Int
+    description String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("items")
+}

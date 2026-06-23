@@ -1,6 +1,6 @@
 import LandingPage from "@/modules/homepage/LandingPage";
 
-function Home() {
+async function Home() {
   return (
     <>
       <LandingPage />
