@@ -11,6 +11,7 @@ export default class UserValidation {
       .string()
       .min(6, "Password at least 6 characters")
       .max(100, "Password cannot exceed 100 characters"),
+    role: z.enum(["admin", "user"]).default("user"),
   });
 
   static UPDATE = z.object({

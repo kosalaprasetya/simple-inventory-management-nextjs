@@ -9,12 +9,15 @@ async function CategoryPage({
   searchParams: Promise<{ page?: string; sort?: "asc" | "desc"; search?: string; limit?: string }>;
 }) {
   const params = await searchParams;
-  const result = (await CategoryAction.default.getCategories({
+  const query = {
     page: Number(params.page) || 1,
     limit: Number(params.limit) || 10,
     sortOrder: params.sort || "asc",
     search: params.search || "",
-  })) as { data: { items: CategoryTypes.CategoryType[]; paging: PagingType } };
+  };
+  const result = (await CategoryAction.default.getCategories(query)) as {
+    data: { items: CategoryTypes.CategoryType[]; paging: PagingType };
+  };
 
   return (
     <Suspense fallback={<div className="flex items-center justify-center p-8"><span>Loading...</span></div>}>

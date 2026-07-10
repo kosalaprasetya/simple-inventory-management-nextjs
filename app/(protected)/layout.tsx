@@ -24,7 +24,7 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
       ) : (
         <Sidebar {...sidebarProps} />
       )}
-      <main className="flex-1 overflow-y-auto bg-gray-700 p-2">{children}</main>
+      <main className="flex-1 overflow-y-auto bg-gray-700 p-4">{children}</main>
     </div>
   );
 }

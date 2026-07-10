@@ -19,15 +19,15 @@ export type UpdateCategoryState = {
 
 export default async function updateCategoryAction(
   _prevState: UpdateCategoryState | undefined,
-  data: FormData,
+  formData: FormData,
 ): Promise<UpdateCategoryState> {
   const categoryActions = CategoryAction.default;
-  const id = data.get("id") as string;
+  const id = formData.get("id") as string;
   if (!id) {
     return { success: false, errors: { label: ["Category ID is required"] } };
   }
 
-  const input = Object.fromEntries(data.entries());
+  const input = Object.fromEntries(formData.entries());
   delete input.id;
 
   const result = Validation.validate(CategoryValidation.UPDATE, input);

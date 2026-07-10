@@ -12,7 +12,7 @@ export default class CategoryService {
   static async listCategories(query?: ListCategoryQueryType) {
     const listQuery = {
       page: query?.page || 1,
-      limit: query?.limit || 10,
+      limit: query?.limit ?? 10,
       search: query?.search || "",
       sortOrder: query?.sortOrder || "asc",
     } as ListCategoryQueryType;

@@ -45,7 +45,7 @@ export default async function RegisterAction(
       },
     };
   }
-  const createUser = await userActions.create(inputData);
+  const createUser = await userActions.create({ ...inputData, role: "user" });
   if (!createUser.data) {
     return {
       success: false,

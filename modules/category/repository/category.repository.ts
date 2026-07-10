@@ -16,7 +16,7 @@ export default class CategoryRepository {
   }> {
     const { page = 1, limit = 10, search = "", sortOrder = "asc" } = query;
     const skip = (page - 1) * limit;
-    const take = limit;
+    const take = limit || undefined;
     const where = search
       ? { OR: [{ label: { contains: search, mode: "insensitive" as const } }] }
       : undefined;
@@ -29,7 +29,7 @@ export default class CategoryRepository {
     const totalItems = await db.category.count({ where });
     const paging = {
       currentPage: page,
-      totalPages: Math.ceil(totalItems / limit),
+      totalPages: limit > 0 ? Math.ceil(totalItems / limit) : 0,
       totalItems,
     };
     return { items: result, paging };

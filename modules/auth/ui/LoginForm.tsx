@@ -18,7 +18,15 @@ const LoginForm = () => {
       className="flex w-full max-w-lg flex-col gap-2 rounded-md bg-gray-800 p-8"
     >
       <div className="mb-4 flex flex-col gap-2">
-        <h1 className="text-center text-2xl font-bold">Login</h1>
+        <div className="title">
+          <Link
+            href="/"
+            className="text-center text-sm font-bold text-blue-400"
+          >
+            Return to Home
+          </Link>
+          <h1 className="text-center text-2xl font-bold">Login</h1>
+        </div>
 
         <p className="text-center text-gray-400">
           Please fill in the form below to log in to your account.

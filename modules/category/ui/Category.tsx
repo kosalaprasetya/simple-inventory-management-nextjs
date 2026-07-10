@@ -4,8 +4,8 @@ import { useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CategoryTypes } from "../category.interface";
 import type { PagingType } from "@/lib/types";
-import CreateDialog from "./CreateDialog";
-import UpdateDialog from "./UpdateDialog";
+import CreateDialog from "./components/CreateDialog";
+import UpdateDialog from "./components/UpdateDialog";
 import CategoryTable from "./components/CategoryTable";
 
 function buildUrl(search: string, sort: string, page: string) {
@@ -51,12 +51,12 @@ export default function Category({
   function toggleSort() {
     clearTimeout(debounceTimer.current);
     const nextSort = sort === "asc" ? "desc" : "asc";
-    router.push(buildUrl(search, nextSort, "1"));
+    router.replace(buildUrl(search, nextSort, "1"));
   }
 
   function goToPage(n: number) {
     clearTimeout(debounceTimer.current);
-    router.push(buildUrl(search, sort, String(n)));
+    router.replace(buildUrl(search, sort, String(n)));
   }
 
   return (
@@ -78,8 +78,9 @@ export default function Category({
           setCategoryToEdit(null);
         }}
       ></div>
-      <div className={`flex flex-col gap-4 p-4 md:p-8`}>
+      <div className={`flex flex-col gap-4 p-4`}>
         <h1 className="text-2xl font-bold">Categories</h1>
+        {/* search & sort */}
         <div className="flex items-center gap-3 rounded-lg bg-gray-800 p-4">
           <input
             type="text"
@@ -101,12 +102,12 @@ export default function Category({
             Add Category
           </button>
         </div>
-
+        {/* table */}
         <CategoryTable
           categories={categories}
           onEdit={(cat) => setCategoryToEdit(cat)}
         />
-
+        {/* pagination */}
         {paging.totalPages > 0 && (
           <div className="flex items-center justify-between rounded-lg bg-gray-800 p-4">
             <span className="text-sm text-gray-400">

@@ -2,12 +2,12 @@ import { z } from "zod";
 
 export default class AuthValidation {
   static readonly LOGIN = z.object({
-    email: z.email(),
+    email: z.email({ message: "Email is required" }),
     password: z.string().min(6, "Password must be at least 6 characters long"),
   });
 
   static readonly REGISTER = z.object({
-    email: z.email(),
+    email: z.email({ message: "Email is required" }),
     password: z
       .string()
       .min(6, "Password must be at least 6 characters long")

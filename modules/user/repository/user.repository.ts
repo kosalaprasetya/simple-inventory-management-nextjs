@@ -24,22 +24,27 @@ export default class UserRepository {
     } = query;
     const skip = (page - 1) * limit;
     const take = limit;
+    const where: Record<string, unknown> = {};
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: "insensitive" } },
+        { email: { contains: search, mode: "insensitive" } },
+      ];
+    }
+    if (filter) {
+      where.role = { equals: filter, mode: "insensitive" };
+    }
     const result = await db.user.findMany({
       skip,
       take,
-      orderBy: { name: sortOrder || "asc" },
-      where: {
-        OR: [
-          { name: { contains: search, mode: "insensitive" } },
-          { email: { contains: search, mode: "insensitive" } },
-          { role: { equals: filter, mode: "insensitive" } },
-        ],
-      },
+      orderBy: { name: sortOrder },
+      where,
     });
+    const totalItems = await db.user.count({ where });
     const paging = {
       currentPage: page,
-      totalPages: Math.ceil((await db.user.count()) / limit),
-      totalItems: await db.user.count(),
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
     };
     return { items: result, paging };
   }

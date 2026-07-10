@@ -9,7 +9,7 @@ import UserRepository from "../repository/user.repository";
 
 export default class UserService {
   static async create(data: CreateUserType) {
-    const { name, email, password } = data;
+    const { name, email, password, role } = data;
     const existingUser = await UserRepository.getByEmail(email);
     if (existingUser) {
       throw new Error("User with this email already exists");
@@ -18,6 +18,7 @@ export default class UserService {
       name,
       email,
       password: await Bcrypt.hash(password),
+      role,
     } as CreateUserType;
     return await UserRepository.create(payload);
   }
@@ -42,10 +43,10 @@ export default class UserService {
     if (!existingUser) {
       throw new Error("User not found");
     }
-    const updatedData = {
-      ...data,
-      password: data.password ?? Bcrypt.hash(data.password!),
-    } as UpdateUserType;
+    const updatedData: UpdateUserType = { ...data };
+    if (data.password) {
+      updatedData.password = await Bcrypt.hash(data.password);
+    }
     return await UserRepository.update(id, updatedData);
   }
   static async delete(id: string) {

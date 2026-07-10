@@ -9,6 +9,7 @@ import {
   User,
 } from "lucide-react";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import SidebarMenuItem from "./SidebarMenuItem";
 import Link from "next/link";
 
@@ -28,7 +29,7 @@ const Sidebar = ({
   email?: string;
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [isActivePath, setIsActivePath] = useState("/dashboard");
+  const activePath = usePathname();
   return (
     <aside
       className={`bg-slate-800 ${isCollapsed ? "w-16" : "w-64"} transition-width relative flex h-screen flex-col justify-between duration-300`}
@@ -57,8 +58,7 @@ const Sidebar = ({
             <SidebarMenuItem
               key={index}
               item={item}
-              isActivePath={isActivePath}
-              setIsActivePath={setIsActivePath}
+              activePath={activePath}
               isCollapsed={isCollapsed}
             />
           ))}

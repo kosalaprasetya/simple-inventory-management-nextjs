@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 import { useActionState } from "react";
+import { CategoryTypes } from "@/modules/category/category.interface";
 import updateCategoryAction, {
   UpdateCategoryState,
-} from "../actions/update.action";
-import { CategoryTypes } from "../category.interface";
+} from "@/modules/category/actions/update.action";
 
 const initialState: UpdateCategoryState = { success: false, errors: {} };
 

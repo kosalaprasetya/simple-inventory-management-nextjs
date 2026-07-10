@@ -19,11 +19,19 @@ const RegisterForm = () => {
   return (
     <form
       action={action}
-      className="flex flex-col gap-2 p-8 bg-gray-800 rounded-md max-w-lg w-full"
+      className="flex w-full max-w-lg flex-col gap-2 rounded-md bg-gray-800 p-8"
     >
-      <div className="mb-4 flex-col flex gap-2">
-        <h1 className="text-2xl font-bold text-center">Register</h1>
-        <p className="text-gray-400 text-center">
+      <div className="mb-4 flex flex-col gap-2">
+        <div className="title">
+          <Link
+            href="/"
+            className="text-center text-sm font-bold text-blue-400"
+          >
+            Return to Home
+          </Link>
+          <h1 className="text-center text-2xl font-bold">Register</h1>
+        </div>
+        <p className="text-center text-gray-400">
           Please fill in the form below to create an account.
         </p>
       </div>
@@ -33,7 +41,7 @@ const RegisterForm = () => {
         name="name"
         placeholder="Name"
         defaultValue={state?.data?.name || ""}
-        className={`border p-2 rounded-lg text-sm ${
+        className={`rounded-lg border p-2 text-sm ${
           state?.errors?.name?.length ? "border-red-500" : "border-gray-700"
         }`}
       />
@@ -47,7 +55,7 @@ const RegisterForm = () => {
         name="email"
         placeholder="Email"
         defaultValue={state?.data?.email || ""}
-        className={`border p-2 rounded-lg text-sm ${
+        className={`rounded-lg border p-2 text-sm ${
           state?.errors?.email?.length ? "border-red-500" : "border-gray-700"
         }`}
       />
@@ -61,7 +69,7 @@ const RegisterForm = () => {
         name="password"
         placeholder="Password"
         defaultValue={state?.data?.password || ""}
-        className={`border p-2 rounded-lg text-sm ${
+        className={`rounded-lg border p-2 text-sm ${
           state?.errors?.password?.length ? "border-red-500" : "border-gray-700"
         }`}
       />
@@ -72,15 +80,15 @@ const RegisterForm = () => {
 
       <button
         type="submit"
-        className={`bg-blue-500 text-white p-2 rounded-lg mt-4 cursor-pointer hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed ${
-          pending ? "opacity-50 cursor-not-allowed" : ""
+        className={`mt-4 cursor-pointer rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50 ${
+          pending ? "cursor-not-allowed opacity-50" : ""
         }`}
         disabled={pending}
       >
         {pending ? "Registering..." : "Register"}
       </button>
 
-      <div className="text-xs text-gray-400 text-center">
+      <div className="text-center text-xs text-gray-400">
         Already have an account?{" "}
         <Link href="/auth/login" className="text-blue-500 hover:underline">
           Login

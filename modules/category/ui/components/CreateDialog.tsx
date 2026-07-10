@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useActionState } from "react";
 import createCategoryAction, {
   CreateCategoryState,
-} from "../actions/create.action";
+} from "../../actions/create.action";
 
 const initialState: CreateCategoryState = { success: false, errors: {} };
 

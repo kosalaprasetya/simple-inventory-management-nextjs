@@ -20,23 +20,27 @@ export default class ItemRepository {
     } = query;
     const skip = (page - 1) * limit;
     const take = limit;
+    const where: Record<string, unknown> = { user_id: userId };
+    if (filter) {
+      where.category_id = filter;
+    }
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+      ];
+    }
     const result = await db.item.findMany({
       skip,
       take,
       orderBy: { name: sortOrder || "asc" },
-      where: {
-        user_id: userId,
-        OR: [
-          { category_id: { equals: filter, mode: "insensitive" } },
-          { name: { contains: search, mode: "insensitive" } },
-          { description: { contains: search, mode: "insensitive" } },
-        ],
-      },
+      where,
     });
+    const totalItems = await db.item.count({ where });
     const paging = {
       currentPage: page,
-      totalPages: Math.ceil((await db.item.count()) / limit),
-      totalItems: await db.item.count(),
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
     };
     return { items: result, paging };
   }
@@ -51,15 +55,17 @@ export default class ItemRepository {
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
     const take = limit;
+    const where = { category_id: categoryId, user_id: userId };
     const result = await db.item.findMany({
       skip,
       take,
-      where: { AND: [{ category_id: categoryId }, { user_id: userId }] },
+      where,
     });
+    const totalItems = await db.item.count({ where });
     const paging = {
       currentPage: page,
-      totalPages: Math.ceil((await db.item.count()) / limit),
-      totalItems: await db.item.count(),
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
     };
     return { items: result, paging };
   }
