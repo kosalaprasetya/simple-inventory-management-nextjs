@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/dataAccess";
 import Sidebar from "@/modules/dashboard/ui/components/sidebar/Sidebar";
-import SidebarAdmin from "@/modules/dashboard/ui/components/sidebar/SidebarAdmin";
 
 async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const userSession = (await getUser()) as {
@@ -19,11 +18,7 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
   };
   return (
     <div className="flex h-screen overflow-hidden">
-      {userRole === "admin" ? (
-        <SidebarAdmin {...sidebarProps} />
-      ) : (
-        <Sidebar {...sidebarProps} />
-      )}
+      <Sidebar {...sidebarProps} />
       <main className="flex-1 overflow-y-auto bg-gray-700 p-4">{children}</main>
     </div>
   );

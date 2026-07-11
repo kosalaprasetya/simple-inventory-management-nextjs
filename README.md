@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Inventory Management System
 
-## Getting Started
+A full-stack inventory management application built with Next.js 16, React 19, Prisma 7, and PostgreSQL.
 
-First, run the development server:
+## Features
+
+- **User Management** — Admin creates users, assigns roles (admin/user)
+- **Category Management** — CRUD categories with search and sorting
+- **Item Management** — Track inventory items with stock levels, linked to categories and users
+- **Authentication** — JWT-based login with httpOnly cookies, role-based access control
+- **Modular Architecture** — Each feature follows validation → types → repository → service → controller → actions → UI pattern
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 16 (App Router) |
+| UI | React 19, Tailwind CSS v4, lucide-react |
+| Backend | Server Actions, Prisma 7, PostgreSQL |
+| Auth | JWT (jsonwebtoken), bcryptjs |
+| Validation | Zod |
+| Language | TypeScript |
+
+## Quick Start
+
+### Prerequisites
+
+- [Bun](https://bun.sh/) (recommended) or Node.js 18+
+- [PostgreSQL](https://www.postgresql.org/) running locally
+
+### Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Install dependencies
+bun install
+
+# 2. Configure database
+#    Edit .env with your PostgreSQL connection string
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/inventory-management-system-db"
+JWT_SECRET="your-secret-key"
+
+# 3. Run migrations
+bunx prisma migrate dev
+
+# 4. Start development server
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+|---------|-------------|
+| `bun run dev` | Start development server |
+| `bun run build` | Build for production |
+| `bun run start` | Start production server |
+| `bun run lint` | Run ESLint |
+| `bunx prisma migrate dev` | Run database migrations |
+| `bunx prisma studio` | Open Prisma database browser |
+| `bunx prisma generate` | Regenerate Prisma client |
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Public routes (login)
+│   └── (protected)/              # Authenticated routes
+│       ├── layout.tsx            # Auth guard + sidebar
+│       ├── category/             # Category module routes
+│       ├── item/                 # Item module routes
+│       └── users/                # User module routes
+├── lib/                          # Shared utilities
+│   ├── db.ts                     # Prisma client singleton
+│   ├── session.ts                # JWT cookie management
+│   ├── jwt.ts                    # JWT sign/verify
+│   ├── bcrypt.ts                 # Password hashing
+│   ├── dataAccess.ts             # Auth guards (getUser, verifyRole)
+│   ├── response.ts               # Standardized API responses
+│   ├── validation.ts             # Zod validation wrapper
+│   ├── formatError.ts            # Error normalization
+│   └── types.ts                  # Shared types (PagingType, ResponseType)
+├── modules/                      # Feature modules
+│   ├── shared/                   # Shared components and hooks
+│   │   ├── components/           # SearchBar, SortButton, PaginationControls
+│   │   └── hooks/                # useListParams
+│   ├── auth/                     # Authentication module
+│   ├── user/                     # User management module
+│   ├── item/                     # Item management module
+│   └── category/                 # Category management module
+├── prisma/                       # Database schema
+│   └── schema.prisma
+└── docs/                         # Documentation
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Default Admin Account
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+After running migrations and seeding, you can log in with:
 
-## Deploy on Vercel
+- **Email:** `admin@gmail.com`
+- **Password:** `12345678`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+> **Note:** Create this user manually in the database or through the registration flow.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Documentation
+
+Comprehensive documentation is available in the [`docs/`](./docs/) folder:
+
+| Guide | Description |
+|-------|-------------|
+| [Documentation Index](./docs/readme.md) | Full documentation index |
+| [Getting Started](./docs/getting-started.md) | Detailed setup guide |
+| [Architecture](./docs/architecture.md) | Tech stack, directory structure, concepts |
+| [Data Flow](./docs/data-flow.md) | How data moves through the system |
+| [Authentication](./docs/auth.md) | Login, sessions, roles, security |
+| [Modules](./docs/modules.md) | Catalog of all modules |
+| [Backend](./docs/backend.md) | Server actions, controllers, services |
+| [Client Side](./docs/client-side.md) | UI components, forms, shared components |
+| [Conventions](./docs/conventions.md) | Naming rules and code style |
+| [Troubleshooting](./docs/troubleshooting.md) | Common errors and fixes |
+| [How to Develop a Module](./docs/how-to-develop-module.md) | Step-by-step tutorial |
+| [Helpers](./docs/helpers.md) | Utility functions in lib/ |
+| [ERD Diagram](./docs/erd/erd.drawio) | Visual database diagram |

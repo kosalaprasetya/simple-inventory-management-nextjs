@@ -2,18 +2,20 @@ import Link from 'next/link';
 import { LucideProps } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
+export type MenuItem = {
+  label: string;
+  path: string;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
+};
+
 const SidebarMenuItem = ({
   item,
   activePath,
   isCollapsed,
 }: {
-  item: {
-    label: string;
-    path: string;
-    icon: ForwardRefExoticComponent<
-      Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-    >;
-  };
+  item: MenuItem;
   activePath: string;
   isCollapsed: boolean;
 }) => {

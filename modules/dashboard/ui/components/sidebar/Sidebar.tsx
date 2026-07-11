@@ -6,17 +6,24 @@ import {
   House,
   LayersPlus,
   Package,
+  SquareUserRound,
   User,
 } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import SidebarMenuItem from "./SidebarMenuItem";
 import Link from "next/link";
+import { MenuItem } from "./SidebarMenuItem";
 
-const menuItems = [
+const baseMenuItems: MenuItem[] = [
   { label: "Dashboard", path: "/dashboard", icon: House },
   { label: "Category", path: "/category", icon: LayersPlus },
   { label: "Items", path: "/items", icon: Package },
+];
+
+const adminMenuItems: MenuItem[] = [
+  ...baseMenuItems,
+  { label: "Users", path: "/users", icon: SquareUserRound },
 ];
 
 const Sidebar = ({
@@ -30,6 +37,7 @@ const Sidebar = ({
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const activePath = usePathname();
+  const menuItems = role === "admin" ? adminMenuItems : baseMenuItems;
   return (
     <aside
       className={`bg-slate-800 ${isCollapsed ? "w-16" : "w-64"} transition-width relative flex h-screen flex-col justify-between duration-300`}
