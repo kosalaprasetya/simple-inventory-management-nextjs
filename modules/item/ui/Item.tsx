@@ -55,7 +55,7 @@ const Item = ({
           </button>
         </div>
 
-        <div className="overflow-hidden rounded-lg bg-gray-800">
+        <div className="overflow-x-auto rounded-lg bg-gray-800">
           <ItemsTable data={data} onEdit={(item) => setItemToEdit(item)} />
         </div>
         <PaginationControls
