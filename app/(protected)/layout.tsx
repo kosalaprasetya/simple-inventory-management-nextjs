@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { getUser } from "@/lib/dataAccess";
 import Sidebar from "@/modules/dashboard/ui/components/sidebar/Sidebar";
 
+export const dynamic = "force-dynamic";
+
 async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const userSession = (await getUser()) as {
     success: boolean;
