@@ -39,7 +39,6 @@ export default class UserRepository {
       take,
       orderBy: { name: sortOrder },
       where,
-      omit: { password: true },
     });
     const totalItems = await db.user.count({ where });
     const paging = {
