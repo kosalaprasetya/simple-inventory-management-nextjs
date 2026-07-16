@@ -13,11 +13,13 @@ import ItemsTable from "./components/ItemsTable";
 
 const Item = ({
   data,
+  categories,
 }: {
   data: {
     items: ItemTypes.ItemType[];
     paging: PagingType;
   };
+  categories: { id: string; label: string }[];
 }) => {
   const { sort, search, onSearch, toggleSort, goToPage } = useListParams({
     basePath: "/items",
@@ -37,10 +39,10 @@ const Item = ({
         }}
       ></div>
       {showCreateDialog && (
-        <CreateDialog onClose={() => setShowCreateDialog(false)} />
+        <CreateDialog onClose={() => setShowCreateDialog(false)} categories={categories} />
       )}
       {itemToEdit && (
-        <UpdateDialog item={itemToEdit} onClose={() => setItemToEdit(null)} />
+        <UpdateDialog item={itemToEdit} onClose={() => setItemToEdit(null)} categories={categories} />
       )}
       <div className={`flex flex-col gap-4 p-4`}>
         <h1 className="text-2xl font-bold">Items</h1>
@@ -56,7 +58,7 @@ const Item = ({
         </div>
 
         <div className="overflow-x-auto rounded-lg bg-gray-800">
-          <ItemsTable data={data} onEdit={(item) => setItemToEdit(item)} />
+          <ItemsTable data={data} onEdit={(item) => setItemToEdit(item)} categories={categories} />
         </div>
         <PaginationControls
           currentPage={data.paging.currentPage}

@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useActionState } from "react";
 import updateItemAction, {
   UpdateItemState,
 } from "@/modules/item/actions/update.action";
-import fetchCategoryAction from "@/modules/item/actions/fetchCategories.action";
 import { ItemType } from "@/modules/item/types/item.types";
 
 const initialState: UpdateItemState = { success: false, errors: {} };
@@ -11,28 +10,20 @@ const initialState: UpdateItemState = { success: false, errors: {} };
 const UpdateDialog = ({
   item,
   onClose,
+  categories,
 }: {
   item: ItemType;
   onClose: () => void;
+  categories: { id: string; label: string }[];
 }) => {
   const [state, action, isPending] = useActionState(
     updateItemAction,
     initialState,
   );
-  const [category, setCategory] = useState<{
-    items: { id: string; label: string }[];
-  } | null>(null);
   useEffect(() => {
     if (state.success) {
       onClose();
     }
-    async function fetchCategory() {
-      const result = await fetchCategoryAction();
-      if (result.success) {
-        setCategory(result.data as { items: { id: string; label: string }[] });
-      }
-    }
-    fetchCategory();
   }, [state.success, onClose]);
 
   return (
@@ -71,8 +62,7 @@ const UpdateDialog = ({
             className={`rounded-md bg-gray-700 px-3 py-2 text-sm text-white outline-none placeholder:text-gray-400 ${state?.errors?.stock?.[0] ? "border border-red-500 focus:ring-2 focus:ring-red-500" : "focus:ring-2 focus:ring-blue-500"} w-full`}
           />
         </div>
-        {category ? (
-          <div id="category" className="w-full">
+        <div id="category" className="w-full">
             {state?.errors?.category_id?.[0] && (
               <p className="text-xs text-red-500">{state?.errors.category_id[0]}</p>
             )}
@@ -85,16 +75,13 @@ const UpdateDialog = ({
               <option value="" disabled>
                 Select a category
               </option>
-              {category.items.map((cat) => (
+              {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.label}
                 </option>
               ))}
             </select>
           </div>
-        ) : (
-          <div className="h-10 animate-pulse rounded-md bg-gray-700" />
-        )}
         <div id="description">
           {state?.errors?.description?.[0] && (
             <p className="text-xs text-red-500">

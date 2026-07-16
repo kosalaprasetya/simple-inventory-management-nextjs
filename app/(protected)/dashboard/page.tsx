@@ -5,10 +5,11 @@ import UserDashboard from "@/modules/dashboard/ui/pages/UserDashboard";
 async function DashboardPage() {
   const userSession = (await getUser()) as {
     success: boolean;
-    data: { role?: string } | null;
+    data: { role?: string; id?: string } | null;
   };
   const userRole = userSession.data?.role;
-  return <>{userRole === "admin" ? <AdminDashboard /> : <UserDashboard />}</>;
+  const userId = userSession.data?.id || "";
+  return <>{userRole === "admin" ? <AdminDashboard userId={userId} /> : <UserDashboard userId={userId} />}</>;
 }
 
 export default DashboardPage;

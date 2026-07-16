@@ -1,42 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ItemTypes } from "../../item.interface";
-import fetchCategoriesAction from "../../actions/fetchCategories.action";
 import deleteItemAction from "@/modules/item/actions/delete.action";
+import { ItemTypes } from "../../item.interface";
 
 const ItemsTable = ({
   data,
   onEdit,
+  categories,
 }: {
   data: {
     items: ItemTypes.ItemType[];
   };
   onEdit: (item: ItemTypes.ItemType) => void;
+  categories: { id: string; label: string }[];
 }) => {
-  // Lookup table: category_id => label
-  const [categoryMap, setCategoryMap] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    async function loadCategories() {
-      const response = await fetchCategoriesAction();
-
-      // Extract the list of categories from the API response
-      type CategoryShape = { id: string; label: string };
-      const data = response.data as { items: CategoryShape[] };
-      const categories: CategoryShape[] = data?.items ?? [];
-
-      // Build a map so we can look up a label by ID in O(1)
-      const map: Record<string, string> = {};
-      for (const category of categories) {
-        map[category.id] = category.label;
-      }
-
-      setCategoryMap(map);
-    }
-
-    loadCategories();
-  }, []);
+  const categoryMap: Record<string, string> = {};
+  for (const category of categories) {
+    categoryMap[category.id] = category.label;
+  }
 
   return (
     <table className="w-full text-sm">

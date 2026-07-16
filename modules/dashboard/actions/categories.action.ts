@@ -1,20 +1,16 @@
 "use server";
 
-import { getUser } from "@/lib/dataAccess";
 import db from "@/lib/db";
 
 export async function countCategories() {
   return await db.category.count();
 }
 
-export async function mostPopularCategories() {
-  const { data } = await getUser();
-  const user = data as { id: string };
-
+export async function mostPopularCategories(userId: string) {
   // Group items by category_id, count per category, take top 5
   const groups = await db.item.groupBy({
     by: ["category_id"],
-    where: { user_id: user.id },
+    where: { user_id: userId },
     _count: { id: true },
     orderBy: { _count: { id: "desc" } },
     take: 5,

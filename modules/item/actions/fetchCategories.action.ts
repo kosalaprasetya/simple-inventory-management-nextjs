@@ -9,6 +9,6 @@ export default async function fetchCategoriesAction(): Promise<{
   data: unknown;
 }> {
   const categoryActions = CategoryAction.default;
-  const fetch = await categoryActions.getCategories({ limit: 0 });
+  const fetch = await categoryActions.getCategories();
   return fetch;
 }

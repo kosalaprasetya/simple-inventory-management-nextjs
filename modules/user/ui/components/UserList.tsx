@@ -10,7 +10,6 @@ const UserList = ({
     name: string;
     id: string;
     email: string;
-    password: string;
     role: string;
     createdAt: Date;
     updatedAt: Date;

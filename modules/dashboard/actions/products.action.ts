@@ -1,38 +1,27 @@
 "use server";
 
 import db from "@/lib/db";
-import { getUser } from "@/lib/dataAccess";
-import { ResponseType } from "@/lib/types";
 import { Item } from "@/lib/generated/prisma/client";
 
-async function getUserId(): Promise<string> {
-  const userData = (await getUser()) as { data: { id: string } };
-  return userData?.data?.id;
-}
-
-export async function countProducts(): Promise<number> {
-  const userId = await getUserId();
+export async function countProducts(userId: string): Promise<number> {
   return await db.item.count({
     where: { user_id: userId },
   });
 }
 
-export async function countLowStockProducts(): Promise<number> {
-  const userId = await getUserId();
+export async function countLowStockProducts(userId: string): Promise<number> {
   return await db.item.count({
     where: { user_id: userId, stock: { lte: 5 } },
   });
 }
 
-export async function countOutOfStockProducts(): Promise<number> {
-  const userId = await getUserId();
+export async function countOutOfStockProducts(userId: string): Promise<number> {
   return await db.item.count({
     where: { user_id: userId, stock: 0 },
   });
 }
 
-export async function latestProducts(): Promise<Item[]> {
-  const userId = await getUserId();
+export async function latestProducts(userId: string): Promise<Item[]> {
   return await db.item.findMany({
     where: { user_id: userId },
     orderBy: { createdAt: "desc" },
@@ -40,8 +29,7 @@ export async function latestProducts(): Promise<Item[]> {
   });
 }
 
-export async function lowStockProducts(): Promise<Item[]> {
-  const userId = await getUserId();
+export async function lowStockProducts(userId: string): Promise<Item[]> {
   return await db.item.findMany({
     where: { user_id: userId, stock: { lte: 5 } },
     orderBy: { stock: "asc" },
@@ -49,8 +37,7 @@ export async function lowStockProducts(): Promise<Item[]> {
   });
 }
 
-export async function outOfStockProducts(): Promise<Item[]> {
-  const userId = await getUserId();
+export async function outOfStockProducts(userId: string): Promise<Item[]> {
   return await db.item.findMany({
     where: { user_id: userId, stock: 0 },
     orderBy: { createdAt: "desc" },

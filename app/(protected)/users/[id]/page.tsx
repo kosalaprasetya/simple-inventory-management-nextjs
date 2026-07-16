@@ -4,8 +4,8 @@ import { UserActions, UserTypes } from "@/modules/user/user.interface";
 import UserDetail from "@/modules/user/ui/UserDetail";
 
 async function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  await verifyRole("admin");
-  const { id } = await params;
+  const [, resolvedParams] = await Promise.all([verifyRole("admin"), params]);
+  const { id } = resolvedParams;
   const result = (await UserActions.default.getUserById(id)) as ResponseType;
   if (!result.success) {
     return (

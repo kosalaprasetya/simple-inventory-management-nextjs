@@ -22,17 +22,28 @@ import {
 import { countUsers } from "../../actions/users.action";
 import MostPopularCategories from "../components/MostPopularCategories";
 
-const AdminDashboard = async () => {
-  const totalProductsCount = await countProducts();
-  const lowStockCount = await countLowStockProducts();
-  const outOfStockCount = await countOutOfStockProducts();
-  const categoriesCount = await countCategories();
-  const totalUsersCount = await countUsers();
-
-  const latestProductsData = await latestProducts();
-  const popularCategoriesData = await mostPopularCategories();
-  const lowStockProductsData = await lowStockProducts();
-  const outOfStockProductsData = await outOfStockProducts();
+const AdminDashboard = async ({ userId }: { userId: string }) => {
+  const [
+    totalProductsCount,
+    lowStockCount,
+    outOfStockCount,
+    categoriesCount,
+    totalUsersCount,
+    latestProductsData,
+    popularCategoriesData,
+    lowStockProductsData,
+    outOfStockProductsData,
+  ] = await Promise.all([
+    countProducts(userId),
+    countLowStockProducts(userId),
+    countOutOfStockProducts(userId),
+    countCategories(),
+    countUsers(),
+    latestProducts(userId),
+    mostPopularCategories(userId),
+    lowStockProducts(userId),
+    outOfStockProducts(userId),
+  ]);
 
   return (
     <div className="flex flex-col gap-6 p-4">

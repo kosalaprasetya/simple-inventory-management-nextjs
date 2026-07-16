@@ -1,5 +1,6 @@
 import Item from "@/modules/item/ui/Item";
 import { ItemActions, ItemTypes } from "@/modules/item/item.interface";
+import { CategoryAction } from "@/modules/category/category.interface";
 import { getUser } from "@/lib/dataAccess";
 import { PagingType } from "@/lib/types";
 import { Suspense } from "react";
@@ -15,8 +16,10 @@ async function ItemsPage({
     sort: string;
   }>;
 }) {
-  const user = (await getUser()) as { data: { id: string } } | null;
-  const params = await searchParams;
+  const [user, params] = await Promise.all([
+    getUser() as Promise<{ data: { id: string } } | null>,
+    searchParams,
+  ]);
   const query = {
     userId: user?.data?.id || "",
     page: Number(params.page) || 1,
@@ -25,9 +28,16 @@ async function ItemsPage({
     filter: params.filter || "",
     sortOrder: params.sort || "asc",
   } as ItemTypes.ListItemQueryType;
-  const result = (await ItemActions.default.listItems(query)) as {
-    data: { items: ItemTypes.ItemType[]; paging: PagingType };
-  };
+
+  const [result, categoriesResult] = await Promise.all([
+    ItemActions.default.listItems(query),
+    CategoryAction.default.getCategories(),
+  ]);
+
+  const categories =
+    (categoriesResult.data as { items: { id: string; label: string }[] })
+      ?.items ?? [];
+
   return (
     <>
       <Suspense
@@ -39,13 +49,16 @@ async function ItemsPage({
       >
         <Item
           data={{
-            items: result?.data?.items ?? [],
-            paging: result?.data?.paging ?? {
-              currentPage: 1,
-              totalPages: 0,
-              totalItems: 0,
-            },
+            items: (result as { data: { items: ItemTypes.ItemType[] } })?.data
+              ?.items ?? [],
+            paging:
+              (result as { data: { paging: PagingType } })?.data?.paging ?? {
+                currentPage: 1,
+                totalPages: 0,
+                totalItems: 0,
+              },
           }}
+          categories={categories}
         />
       </Suspense>
     </>

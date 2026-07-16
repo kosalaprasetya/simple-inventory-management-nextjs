@@ -1,13 +1,19 @@
+import { cache } from 'react';
 import { UserActions } from '@/modules/user/user.interface';
 import { verifySession } from './session';
 import { redirect } from 'next/navigation';
 
-export async function getUser() {
+const _getUser = cache(async () => {
     const userController = UserActions.default;
     const verifiedSession = await verifySession();
-    const user = await userController.getUserById(verifiedSession?.userId);
+    if (!verifiedSession?.userId) redirect('/auth/logout');
+    const user = await userController.getUserById(verifiedSession.userId);
     if(!user.success) redirect('/auth/logout');
     return user;
+});
+
+export async function getUser() {
+    return _getUser();
 }
 
 export async function verifyRole(requiredRole: string) {

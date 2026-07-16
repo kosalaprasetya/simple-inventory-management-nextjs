@@ -15,8 +15,7 @@ async function UsersPage({
     sort?: "asc" | "desc" | undefined;
   }>;
 }) {
-  await verifyRole("admin");
-  const sp = await searchParams;
+  const [, sp] = await Promise.all([verifyRole("admin"), searchParams]);
   const query = {
     page: Number(sp.page) || 1,
     limit: Number(sp.limit) || 10,

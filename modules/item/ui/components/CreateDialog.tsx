@@ -1,29 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useActionState } from "react";
 import createItemAction, { CreateItemState } from "../../actions/create.action";
-import fetchCategoryAction from "@/modules/item/actions/fetchCategories.action";
 
 const initialState: CreateItemState = { success: false, errors: {} };
 
-const CreateDialog = ({ onClose }: { onClose: () => void }) => {
+const CreateDialog = ({
+  onClose,
+  categories,
+}: {
+  onClose: () => void;
+  categories: { id: string; label: string }[];
+}) => {
   const [state, action, isPending] = useActionState(
     createItemAction,
     initialState,
   );
-  const [category, setCategory] = useState<{
-    items: { id: string; label: string }[];
-  } | null>(null);
   useEffect(() => {
     if (state.success) {
       onClose();
     }
-    async function fetchCategory() {
-      const result = await fetchCategoryAction();
-      if (result.success) {
-        setCategory(result.data as { items: { id: string; label: string }[] });
-      }
-    }
-    fetchCategory();
   }, [state.success, onClose]);
 
   return (
@@ -74,7 +69,7 @@ const CreateDialog = ({ onClose }: { onClose: () => void }) => {
             <option value="" defaultChecked disabled>
               Select a category
             </option>
-            {category?.items?.map((cat) => (
+            {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.label}
               </option>
