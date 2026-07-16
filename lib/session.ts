@@ -9,6 +9,8 @@ export async function createSession(payload: object) {
   cookieStore.set("access_token", token, {
     httpOnly: true,
     secure: true,
+    sameSite: "lax",
+    path: "/",
   });
   redirect("/dashboard");
 }
